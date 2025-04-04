@@ -2,16 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "@/stores/StoreContext";
-import TaskHeader from "./TaskHeader";
-import TaskForm from "./TaskForm";
-import TaskFilter from "./TaskFilter";
-import TaskList from "./TaskList";
-import LoginForm from "./auth/LoginForm";
-import RegisterForm from "./auth/RegisterForm";
-import Navbar from "./Navbar";
+import MainLayout from "@/layouts/MainLayout";
+import TaskAppView from "@/features/tasks/views/TaskAppView";
+import LoginView from "@/features/auth/views/LoginView";
+import RegisterView from "@/features/auth/views/RegisterView";
 
 const TaskApp: React.FC = observer(() => {
-  const { taskStore, authStore } = useStore();
+  const { authStore } = useStore();
   const [route, setRoute] = useState<"tasks" | "login" | "register">("tasks");
 
   // Manejar rutas basadas en hash
@@ -36,13 +33,6 @@ const TaskApp: React.FC = observer(() => {
     };
   }, []);
 
-  // Cargar tareas solo si el usuario está autenticado
-  useEffect(() => {
-    if (authStore.isAuthenticated) {
-      taskStore.fetchTasks();
-    }
-  }, [taskStore, authStore.isAuthenticated]);
-
   const renderContent = () => {
     // Si el usuario no está autenticado y no está en una ruta de autenticación, redirigir a login
     if (!authStore.isAuthenticated && route === "tasks") {
@@ -58,41 +48,18 @@ const TaskApp: React.FC = observer(() => {
 
     switch (route) {
       case "login":
-        return (
-          <div className="flex items-center justify-center min-h-[80vh]">
-            <LoginForm />
-          </div>
-        );
+        return <LoginView />;
       case "register":
-        return (
-          <div className="flex items-center justify-center min-h-[80vh]">
-            <RegisterForm />
-          </div>
-        );
+        return <RegisterView />;
       case "tasks":
-        return (
-          <div className="max-w-2xl mx-auto p-4 mt-8">
-            <div className="bg-white/10 backdrop-blur-xl shadow-lg rounded-xl border border-gray-800/20 p-6">
-              <TaskHeader />
-              <TaskForm />
-              <TaskFilter />
-              <TaskList />
-            </div>
-          </div>
-        );
+        return <TaskAppView />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 text-white">
-      <Navbar />
-      <div className="container mx-auto px-4">
-        {renderContent()}
-      </div>
-      <footer className="mt-20 py-6 text-center text-gray-400 text-sm">
-        <p>© 2025 TaskMaster. Todos los derechos reservados.</p>
-      </footer>
-    </div>
+    <MainLayout>
+      {renderContent()}
+    </MainLayout>
   );
 });
 
