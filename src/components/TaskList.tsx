@@ -3,54 +3,35 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "@/stores/StoreContext";
 import TaskItem from "./TaskItem";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
 
-const TaskList: React.FC = observer(() => {
+const TaskList = observer(() => {
   const { taskStore } = useStore();
-  const { filteredTasks, isLoading, error } = taskStore;
-
-  if (error) {
+  
+  if (taskStore.isLoading) {
     return (
-      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-600">{error}</p>
+      <div className="flex justify-center items-center py-10">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
       </div>
     );
   }
 
-  if (isLoading && filteredTasks.length === 0) {
+  if (taskStore.filteredTasks.length === 0) {
     return (
-      <div className="space-y-3">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="bg-white rounded-lg shadow p-4 animate-pulse">
-            <div className="flex items-start">
-              <Skeleton className="h-5 w-5 rounded-sm" />
-              <div className="ml-3 flex-1">
-                <Skeleton className="h-5 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  if (filteredTasks.length === 0) {
-    return (
-      <div className="text-center p-6">
-        <p className="text-gray-500">No tasks found</p>
-        {taskStore.filter !== "all" && (
-          <p className="text-sm text-gray-400 mt-1">
-            Try selecting a different filter
-          </p>
-        )}
+      <div className="text-center py-8 border border-dashed border-gray-700 rounded-lg bg-gray-800/20">
+        <p className="text-gray-400">No hay tareas disponibles</p>
+        <p className="text-gray-500 text-sm mt-1">
+          {taskStore.filter === "all" 
+            ? "Añade tu primera tarea usando el formulario de arriba" 
+            : "Cambia el filtro para ver otras tareas"}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-3">
-      {filteredTasks.map(task => (
+    <div className="space-y-3 mt-6">
+      {taskStore.filteredTasks.map((task) => (
         <TaskItem key={task.id} task={task} />
       ))}
     </div>

@@ -4,53 +4,39 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "@/stores/StoreContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Plus } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 
-const TaskForm: React.FC = observer(() => {
+const TaskForm = observer(() => {
   const { taskStore } = useStore();
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [expanded, setExpanded] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!title.trim()) return;
-    
-    await taskStore.addTask(title, description);
-    setTitle("");
-    setDescription("");
-    setExpanded(false);
+    if (title.trim()) {
+      taskStore.addTask(title);
+      setTitle("");
+    }
   };
 
   return (
-    <form 
-      onSubmit={handleSubmit}
-      className="bg-white rounded-lg shadow p-4 mb-6 border border-gray-200"
-    >
-      <div className="flex items-center">
+    <form onSubmit={handleSubmit} className="mb-6">
+      <div className="flex space-x-2">
         <Input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Add a new task..."
-          className="flex-1"
-          onFocus={() => setExpanded(true)}
+          placeholder="Añadir nueva tarea..."
+          className="flex-grow bg-gray-800/30 border-gray-700/30 text-white placeholder-gray-400 focus-visible:ring-blue-500"
         />
-        <Button type="submit" size="sm" className="ml-2 bg-purple-600 hover:bg-purple-700">
-          <Plus className="h-5 w-5" />
+        <Button 
+          type="submit" 
+          disabled={!title.trim()}
+          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all"
+        >
+          <PlusCircle className="h-5 w-5 mr-1" />
+          Añadir
         </Button>
       </div>
-      
-      {expanded && (
-        <Textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Add description (optional)"
-          className="mt-2 w-full resize-none"
-          rows={3}
-        />
-      )}
     </form>
   );
 });

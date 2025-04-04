@@ -3,37 +3,45 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { useStore } from "@/stores/StoreContext";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { TaskFilter as FilterType } from "@/stores/TaskStore";
+import { CheckCircle, Circle, ListFilter } from "lucide-react";
 
-const TaskFilter: React.FC = observer(() => {
+const TaskFilter = observer(() => {
   const { taskStore } = useStore();
-  const { filter, totalCount, activeCount, completedCount } = taskStore;
-
-  const filters: { label: string; value: FilterType; count: number }[] = [
-    { label: "All", value: "all", count: totalCount },
-    { label: "Active", value: "active", count: activeCount },
-    { label: "Completed", value: "completed", count: completedCount }
-  ];
-
+  
   return (
-    <div className="flex justify-center space-x-2 mb-6">
-      {filters.map(({ label, value, count }) => (
+    <div className="mb-6">
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-lg font-medium flex items-center gap-2">
+          <ListFilter className="h-5 w-5 text-blue-400" />
+          Filtrar tareas
+        </h2>
+      </div>
+      <div className="flex space-x-2">
         <Button
-          key={value}
-          variant="outline"
-          size="sm"
-          onClick={() => taskStore.setFilter(value)}
-          className={cn(
-            "text-sm font-medium",
-            filter === value
-              ? "bg-purple-100 text-purple-700 border-purple-300"
-              : "text-gray-600"
-          )}
+          variant={taskStore.filter === "all" ? "default" : "outline"}
+          onClick={() => taskStore.setFilter("all")}
+          className={`flex-1 ${taskStore.filter === "all" ? 'bg-gradient-to-r from-blue-500 to-purple-600' : 'border-gray-700/30 hover:bg-gray-700/20 text-gray-300'}`}
         >
-          {label} {count > 0 && <span className="ml-1">({count})</span>}
+          <Circle className="h-4 w-4 mr-2" />
+          Todas
         </Button>
-      ))}
+        <Button
+          variant={taskStore.filter === "active" ? "default" : "outline"}
+          onClick={() => taskStore.setFilter("active")}
+          className={`flex-1 ${taskStore.filter === "active" ? 'bg-gradient-to-r from-blue-500 to-purple-600' : 'border-gray-700/30 hover:bg-gray-700/20 text-gray-300'}`}
+        >
+          <Circle className="h-4 w-4 mr-2" />
+          Activas
+        </Button>
+        <Button
+          variant={taskStore.filter === "completed" ? "default" : "outline"}
+          onClick={() => taskStore.setFilter("completed")}
+          className={`flex-1 ${taskStore.filter === "completed" ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'border-gray-700/30 hover:bg-gray-700/20 text-gray-300'}`}
+        >
+          <CheckCircle className="h-4 w-4 mr-2" />
+          Completadas
+        </Button>
+      </div>
     </div>
   );
 });

@@ -1,16 +1,19 @@
 
 import React, { createContext, useContext } from "react";
 import TaskStore from "./TaskStore";
+import AuthStore from "./AuthStore";
 
 interface StoreContextValue {
   taskStore: typeof TaskStore;
+  authStore: typeof AuthStore;
 }
 
 const StoreContext = createContext<StoreContextValue | null>(null);
 
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const store = {
-    taskStore: TaskStore
+    taskStore: TaskStore,
+    authStore: AuthStore
   };
 
   return (
