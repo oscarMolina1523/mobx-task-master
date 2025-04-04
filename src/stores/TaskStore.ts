@@ -65,16 +65,23 @@ class TaskStore {
             {
               id: "1",
               title: "Learn MobX",
-              description: "Study MobX documentation and examples",
+              description: "Study MobX documentation and examples for effective state management in React applications",
               completed: false,
               createdAt: new Date()
             },
             {
               id: "2",
               title: "Build Task Manager",
-              description: "Create a task manager app using React and MobX",
+              description: "Create a task manager app using React and MobX with clean architecture and backend integration",
               completed: false,
               createdAt: new Date()
+            },
+            {
+              id: "3",
+              title: "Implement Authentication",
+              description: "Add user authentication with login and registration features",
+              completed: true,
+              createdAt: new Date(Date.now() - 86400000)
             }
           ]);
         }, 500);

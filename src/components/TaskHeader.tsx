@@ -5,8 +5,8 @@ import { useStore } from "@/stores/StoreContext";
 
 const TaskHeader = observer(() => {
   const { taskStore, authStore } = useStore();
-  const completedTasks = taskStore.completedTasksCount;
-  const totalTasks = taskStore.totalTasksCount;
+  const completedTasks = taskStore.completedCount;
+  const totalTasks = taskStore.totalCount;
   
   return (
     <div className="mb-6">
