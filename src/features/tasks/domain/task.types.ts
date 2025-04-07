@@ -2,7 +2,7 @@
 // Define las interfaces y tipos relacionados con el dominio de tareas
 
 export interface Task {
-  id: string;
+  _id: string;
   title: string;
   description?: string;
   completed: boolean;
@@ -26,7 +26,7 @@ export interface UpdateTaskDTO {
 
 // Respuestas del servidor
 export interface TaskResponseDTO {
-  id: string;
+  _id: string;
   title: string;
   description?: string;
   completed: boolean;

@@ -1,17 +1,17 @@
 
-import React, { useState } from "react";
-import { observer } from "mobx-react-lite";
-import { useStore } from "@/stores/StoreContext";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Trash, Edit, Save, X, ChevronDown, ChevronUp, Clock } from "lucide-react";
+import { useStore } from "@/stores/StoreContext";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { ChevronDown, ChevronUp, Clock, Edit, Save, Trash, X } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import React, { useState } from "react";
 
 interface Task {
-  id: string;
+  _id: string;
   title: string;
   description?: string;
   completed: boolean;
@@ -23,19 +23,22 @@ interface TaskItemProps {
 }
 
 const TaskItem: React.FC<TaskItemProps> = observer(({ task }) => {
-  const { taskStore } = useStore();
+  const { taskStore, authStore } = useStore();
   const [isEditing, setIsEditing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
   const [editedDescription, setEditedDescription] = useState(task.description || "");
 
+  const token = authStore.token; 
+
   const handleSaveEdit = () => {
     if (editedTitle.trim()) {
-      taskStore.updateTask(task.id, { 
+      taskStore.updateTask(task._id, { 
         title: editedTitle,
         description: editedDescription 
-      });
+      }, token);
       setIsEditing(false);
+      console.log(task._id);
     }
   };
 
@@ -53,7 +56,7 @@ const TaskItem: React.FC<TaskItemProps> = observer(({ task }) => {
         <div className="flex items-center">
           <Checkbox
             checked={task.completed}
-            onCheckedChange={() => taskStore.toggleTaskCompletion(task.id)}
+            onCheckedChange={() => taskStore.toggleTaskCompletion(task._id, token)}
             className={`mr-3 ${task.completed ? 'bg-green-500 border-green-500' : 'border-gray-600'}`}
           />
           
@@ -107,7 +110,7 @@ const TaskItem: React.FC<TaskItemProps> = observer(({ task }) => {
                   <Edit className="h-4 w-4" />
                 </Button>
                 <Button
-                  onClick={() => taskStore.deleteTask(task.id)}
+                  onClick={() => taskStore.deleteTask(task._id, token)}
                   size="sm"
                   variant="ghost"
                   className="text-red-400 hover:text-red-300 hover:bg-red-500/10"

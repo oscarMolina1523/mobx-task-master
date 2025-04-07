@@ -1,9 +1,8 @@
 
-import React from "react";
-import { observer } from "mobx-react-lite";
-import { useStore } from "@/stores/StoreContext";
 import { Button } from "@/components/ui/button";
+import { useStore } from "@/stores/StoreContext";
 import { CheckCircle, Circle, ListFilter } from "lucide-react";
+import { observer } from "mobx-react-lite";
 
 const TaskFilter = observer(() => {
   const { taskStore } = useStore();
@@ -16,7 +15,7 @@ const TaskFilter = observer(() => {
           Filtrar tareas
         </h2>
       </div>
-      <div className="flex space-x-2">
+      <div className="flex flex-wrap gap-2 md:space-x-2">
         <Button
           variant={taskStore.filter === "all" ? "default" : "outline"}
           onClick={() => taskStore.setFilter("all")}

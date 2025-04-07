@@ -1,17 +1,16 @@
-
-import React, { useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { useStore } from "@/stores/StoreContext";
-import MainLayout from "@/layouts/MainLayout";
-import TaskAppView from "@/features/tasks/views/TaskAppView";
 import LoginView from "@/features/auth/views/LoginView";
 import RegisterView from "@/features/auth/views/RegisterView";
+import TaskAppView from "@/features/tasks/views/TaskAppView";
+import MainLayout from "@/layouts/MainLayout";
+import { useStore } from "@/stores/StoreContext";
+import { observer } from "mobx-react-lite";
+import React, { useEffect, useState } from "react";
 
 const TaskApp: React.FC = observer(() => {
   const { authStore } = useStore();
   const [route, setRoute] = useState<"tasks" | "login" | "register">("tasks");
 
-  // Manejar rutas basadas en hash
+  // useEffect para manejar los cambios de hash
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1);
@@ -26,26 +25,23 @@ const TaskApp: React.FC = observer(() => {
     };
 
     window.addEventListener("hashchange", handleHashChange);
-    handleHashChange(); // Comprobar el hash inicial
+    handleHashChange();  // Comprobar el hash inicial
     
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
   }, []);
 
-  const renderContent = () => {
-    // Si el usuario no está autenticado y no está en una ruta de autenticación, redirigir a login
+  // useEffect para manejar los redireccionamientos
+  useEffect(() => {
     if (!authStore.isAuthenticated && route === "tasks") {
       window.location.hash = "#login";
-      return null;
-    }
-
-    // Si el usuario está autenticado y está en una ruta de autenticación, redirigir a tareas
-    if (authStore.isAuthenticated && (route === "login" || route === "register")) {
+    } else if (authStore.isAuthenticated && (route === "login" || route === "register")) {
       window.location.hash = "#tasks";
-      return null;
     }
+  }, [route, authStore.isAuthenticated]);
 
+  const renderContent = () => {
     switch (route) {
       case "login":
         return <LoginView />;
@@ -53,6 +49,8 @@ const TaskApp: React.FC = observer(() => {
         return <RegisterView />;
       case "tasks":
         return <TaskAppView />;
+      default:
+        return null;
     }
   };
 

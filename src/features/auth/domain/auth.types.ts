@@ -1,6 +1,3 @@
-
-// Define interfaces y tipos para el dominio de autenticación
-
 export interface User {
   id: string;
   username: string;

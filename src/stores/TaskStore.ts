@@ -1,9 +1,9 @@
-
+import { addTaskApi, deleteTaskApi, getTasksApi, updateTaskApi } from "@/features/tasks/api/taskApi";
 import { makeAutoObservable, runInAction } from "mobx";
 
 // Task interface
 export interface Task {
-  id: string;
+  _id: string;
   title: string;
   description?: string;
   completed: boolean;
@@ -21,7 +21,6 @@ class TaskStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.fetchTasks();
   }
 
   // Computed properties
@@ -53,69 +52,36 @@ class TaskStore {
     this.filter = filter;
   }
 
-  async fetchTasks() {
+  async fetchTasks(token: string) {
     this.isLoading = true;
     this.error = null;
     
     try {
-      // Simulate API call with a delay
-      const response = await new Promise<Task[]>(resolve => {
-        setTimeout(() => {
-          resolve([
-            {
-              id: "1",
-              title: "Learn MobX",
-              description: "Study MobX documentation and examples for effective state management in React applications",
-              completed: false,
-              createdAt: new Date()
-            },
-            {
-              id: "2",
-              title: "Build Task Manager",
-              description: "Create a task manager app using React and MobX with clean architecture and backend integration",
-              completed: false,
-              createdAt: new Date()
-            },
-            {
-              id: "3",
-              title: "Implement Authentication",
-              description: "Add user authentication with login and registration features",
-              completed: true,
-              createdAt: new Date(Date.now() - 86400000)
-            }
-          ]);
-        }, 500);
-      });
-      
+      const response = await getTasksApi(token);
       runInAction(() => {
         this.tasks = response;
         this.isLoading = false;
       });
     } catch (error) {
       runInAction(() => {
-        this.error = "Failed to fetch tasks";
+        this.error = error.message || "Failed to fetch tasks";
         this.isLoading = false;
       });
     }
   }
 
-  async addTask(title: string, description?: string) {
+  async addTask(title: string, token: string , description?: string) {
     if (!title.trim()) return;
     
     this.isLoading = true;
     
     try {
-      // Simulate API call
-      const newTask: Task = {
-        id: Date.now().toString(),
+      const newTaskData = {
         title: title.trim(),
         description: description?.trim(),
         completed: false,
-        createdAt: new Date()
       };
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const newTask = await addTaskApi(newTaskData, token);
       
       runInAction(() => {
         this.tasks.push(newTask);
@@ -123,70 +89,67 @@ class TaskStore {
       });
     } catch (error) {
       runInAction(() => {
-        this.error = "Failed to add task";
+        this.error = error.message || "Failed to add task";
         this.isLoading = false;
       });
     }
   }
 
-  async toggleTaskCompletion(id: string) {
-    const task = this.tasks.find(task => task.id === id);
+  async toggleTaskCompletion(id: string, token: string) {
+    const task = this.tasks.find(task => task._id === id);
     if (!task) return;
     
     this.isLoading = true;
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const updatedTask = await updateTaskApi(id, { completed: !task.completed }, token);
       
       runInAction(() => {
-        task.completed = !task.completed;
+        Object.assign(task, updatedTask);
         this.isLoading = false;
       });
     } catch (error) {
       runInAction(() => {
-        this.error = "Failed to update task";
+        this.error = error.message || "Failed to update task";
         this.isLoading = false;
       });
     }
   }
 
-  async updateTask(id: string, updates: Partial<Omit<Task, "id" | "createdAt">>) {
-    const task = this.tasks.find(task => task.id === id);
+  async updateTask(id: string, updates: Partial<Omit<Task, "id" | "createdAt">>, token: string) {
+    const task = this.tasks.find(task => task._id === id);
     if (!task) return;
     
     this.isLoading = true;
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const updatedTask = await updateTaskApi(id, updates, token);
       
       runInAction(() => {
-        Object.assign(task, updates);
+        Object.assign(task, updatedTask);
         this.isLoading = false;
       });
     } catch (error) {
       runInAction(() => {
-        this.error = "Failed to update task";
+        this.error = error.message || "Failed to update task";
         this.isLoading = false;
       });
     }
   }
 
-  async deleteTask(id: string) {
+  async deleteTask(id: string, token: string) {
     this.isLoading = true;
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await deleteTaskApi(id, token);
       
       runInAction(() => {
-        this.tasks = this.tasks.filter(task => task.id !== id);
+        this.tasks = this.tasks.filter(task => task._id !== id);
         this.isLoading = false;
       });
     } catch (error) {
       runInAction(() => {
-        this.error = "Failed to delete task";
+        this.error = error.message || "Failed to delete task";
         this.isLoading = false;
       });
     }

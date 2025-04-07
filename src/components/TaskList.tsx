@@ -1,9 +1,7 @@
-
-import React from "react";
-import { observer } from "mobx-react-lite";
 import { useStore } from "@/stores/StoreContext";
-import TaskItem from "./TaskItem";
 import { Loader2 } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import TaskItem from "./TaskItem";
 
 const TaskList = observer(() => {
   const { taskStore } = useStore();
@@ -32,7 +30,9 @@ const TaskList = observer(() => {
   return (
     <div className="space-y-3 mt-6">
       {taskStore.filteredTasks.map((task) => (
-        <TaskItem key={task.id} task={task} />
+        <div key={task._id}>
+          <TaskItem key={task._id} task={task} />
+        </div>
       ))}
     </div>
   );

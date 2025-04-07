@@ -1,15 +1,14 @@
-
-import React, { useState } from "react";
-import { observer } from "mobx-react-lite";
-import { useStore } from "@/stores/StoreContext";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useStore } from "@/stores/StoreContext";
 import { PlusCircle } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { observer } from "mobx-react-lite";
+import React, { useState } from "react";
 
 const TaskForm = observer(() => {
-  const { taskStore } = useStore();
+  const { taskStore, authStore } = useStore(); 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -17,14 +16,16 @@ const TaskForm = observer(() => {
   const handleSimpleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (title.trim()) {
-      taskStore.addTask(title);
+      const token = authStore.token; 
+      taskStore.addTask(title, token); 
       setTitle("");
     }
   };
 
   const handleDetailedSubmit = () => {
     if (title.trim()) {
-      taskStore.addTask(title, description);
+      const token = authStore.token;
+      taskStore.addTask(title, token, description); 
       setTitle("");
       setDescription("");
       setIsDialogOpen(false);

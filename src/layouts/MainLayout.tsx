@@ -1,7 +1,6 @@
-
-import React from "react";
+import Navbar from "@/components/Navbar";
 import { observer } from "mobx-react-lite";
-import Navbar from "@/components/Navbar"; // Importamos de la ruta original por ser de solo lectura
+import React from "react";
 
 interface MainLayoutProps {
   children: React.ReactNode;

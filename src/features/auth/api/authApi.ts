@@ -1,94 +1,38 @@
+import axios from 'axios';
+import { LoginCredentials, LoginResponseDTO, RegisterData, RegisterResponseDTO } from "../domain/auth.types";
 
-import { User, LoginCredentials, RegisterData, LoginResponseDTO, RegisterResponseDTO } from "../domain/auth.types";
+const API_BASE_URL = 'https://mobx-backend-production.up.railway.app/api/auth';
 
-// Función auxiliar para simular retrasos en la red
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-// Usuarios mock para simulación
-const mockUsers: Record<string, User & { password: string }> = {
-  'user1@example.com': {
-    id: '1',
-    username: 'usuario1',
-    email: 'user1@example.com',
-    name: 'Usuario de Prueba',
-    password: 'password123'
-  }
-};
-
-// Simulación de API de autenticación
 export const loginApi = async (credentials: LoginCredentials): Promise<LoginResponseDTO> => {
-  // Simular retraso de red
-  await delay(800);
-  
-  const user = Object.values(mockUsers).find(u => u.email === credentials.email);
-  
-  if (!user || user.password !== credentials.password) {
-    throw new Error('Credenciales inválidas. Intenta nuevamente.');
+  try {
+    const response = await axios.post(`${API_BASE_URL}/login`, credentials);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Error al iniciar sesión.');
   }
-  
-  // Generar un token falso
-  const token = `mock-jwt-token-${Date.now()}`;
-  
-  // Devolver usuario sin la contraseña
-  const { password, ...userWithoutPassword } = user;
-  
-  return {
-    user: userWithoutPassword,
-    token
-  };
 };
 
 export const registerApi = async (data: RegisterData): Promise<RegisterResponseDTO> => {
-  // Simular retraso de red
-  await delay(1000);
-  
-  // Verificar si el usuario ya existe
-  if (Object.values(mockUsers).some(u => u.email === data.email)) {
-    throw new Error('Este correo electrónico ya está registrado.');
+  try {
+    const response = await axios.post(`${API_BASE_URL}/register`, data);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || 'Error al registrar usuario.');
   }
-  
-  // Crear un nuevo usuario
-  const newUser: User & { password: string } = {
-    id: Date.now().toString(),
-    username: data.username,
-    email: data.email,
-    name: data.name,
-    password: data.password
-  };
-  
-  // Almacenar en el mock
-  mockUsers[data.email] = newUser;
-  
-  // Generar un token falso
-  const token = `mock-jwt-token-${Date.now()}`;
-  
-  // Devolver usuario sin la contraseña
-  const { password, ...userWithoutPassword } = newUser;
-  
-  return {
-    user: userWithoutPassword,
-    token
-  };
 };
 
-export const logoutApi = async (): Promise<void> => {
-  // Simular retraso de red
-  await delay(300);
-  
-  // En una aplicación real, aquí se invalidaría el token en el servidor
-  return Promise.resolve();
-};
+// export const logoutApi = async (): Promise<void> => {
+//   ///por ahora en el backend no poseo este endpoint lo creare luego lo primordial es el login y register
+//   return Promise.resolve();
+// };
 
-export const getCurrentUserApi = async (): Promise<User> => {
-  // Simular retraso de red
-  await delay(500);
-  
-  // En una aplicación real, aquí se verificaría el token con el servidor y se devolvería el usuario actual
-  // Para la simulación, simplemente devolvemos un usuario de prueba
-  return {
-    id: '1',
-    username: 'usuario1',
-    email: 'user1@example.com',
-    name: 'Usuario de Prueba'
-  };
-};
+// export const getCurrentUserApi = async (): Promise<User> => {
+//   ///por ahora en el backend no poseo este endpoint lo creare luego lo primordial es el login y register
+//   return {
+//     id: '1',
+//     username: 'usuario1',
+//     email: 'user1@example.com',
+//     name: 'Usuario de Prueba'
+//   };
+// };

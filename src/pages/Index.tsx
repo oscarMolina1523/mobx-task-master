@@ -1,7 +1,5 @@
-
-import React from "react";
-import { StoreProvider } from "@/stores/StoreContext";
 import TaskApp from "@/components/TaskApp";
+import { StoreProvider } from "@/stores/StoreContext";
 
 const Index = () => {
   return (

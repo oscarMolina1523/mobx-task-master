@@ -1,10 +1,5 @@
 
-import React from "react";
-import { observer } from "mobx-react-lite";
-import { useStore } from "@/stores/StoreContext";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useStore } from "@/stores/StoreContext";
+import { LogOut, User } from "lucide-react";
+import { observer } from "mobx-react-lite";
+import React from "react";
 
 const UserProfileMenu: React.FC = observer(() => {
   const { authStore } = useStore();
@@ -27,7 +26,7 @@ const UserProfileMenu: React.FC = observer(() => {
           className="relative h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-0.5"
         >
           <span className="sr-only">Open menu</span>
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-background text-xl font-semibold uppercase text-primary-foreground">
+          <div className="flex h-full w-full items-center justify-center rounded-full text-xl font-semibold uppercase text-primary-foreground">
             {authStore.user.username.charAt(0)}
           </div>
         </Button>

@@ -1,7 +1,6 @@
-
 import React from "react";
 import { observer } from "mobx-react-lite";
-import LoginForm from "@/components/auth/LoginForm"; // Mantiene la ruta original por ser de solo lectura
+import LoginForm from "@/components/auth/LoginForm"; 
 
 const LoginView: React.FC = observer(() => {
   return (

@@ -1,6 +1,6 @@
-
-import { makeAutoObservable } from "mobx";
-import { toast } from "sonner";
+import { loginApi, registerApi } from "@/features/auth/api/authApi";
+import { AuthError, RegisterData } from "@/features/auth/domain/auth.types";
+import { makeAutoObservable, runInAction } from "mobx";
 
 interface User {
   id: string;
@@ -20,100 +20,91 @@ interface RegisterCredentials {
 }
 
 class AuthStore {
-  user: User | null = null;
-  isAuthenticated = false;
-  isLoading = false;
+  user: User | null = null; 
+  token: string | null = null; 
+  isLoading: boolean = false; 
+  error: AuthError | null = null;
 
   constructor() {
     makeAutoObservable(this);
-    // Intentar recuperar usuario de localStorage al iniciar
-    this.checkExistingSession();
   }
 
-  checkExistingSession() {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      try {
-        this.user = JSON.parse(savedUser);
-        this.isAuthenticated = true;
-      } catch (error) {
-        localStorage.removeItem("user");
-      }
-    }
+  get isAuthenticated(): boolean {
+    return !!this.user && !!this.token; 
   }
 
   async login(credentials: LoginCredentials) {
     this.isLoading = true;
+    this.error = null; 
+
     try {
-      // Simulamos una llamada a API
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const { user, token } = await loginApi(credentials); 
       
-      // Demo: verificación simple (en producción esto sería validado por el backend)
-      if (credentials.email && credentials.password) {
-        // Crear usuario demo
-        const user = {
-          id: Math.random().toString(36).substring(2, 9),
-          username: credentials.email.split('@')[0],
-          email: credentials.email
-        };
-        
-        this.user = user;
-        this.isAuthenticated = true;
-        
-        // Guardar en localStorage para persistencia
-        localStorage.setItem("user", JSON.stringify(user));
-        
-        toast.success("Inicio de sesión exitoso");
-        return true;
-      } else {
-        toast.error("Credenciales inválidas");
-        return false;
-      }
+      localStorage.setItem('auth_token', token);
+      
+      runInAction(() => {
+        this.user = user; 
+        this.token = token; 
+        this.isLoading = false; 
+      });
+      
+      return true; 
     } catch (error) {
-      toast.error("Error al iniciar sesión");
-      return false;
-    } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.error = {
+          type: 'invalid-credentials',
+          message: error.message 
+        };
+        this.isLoading = false;
+      });
+      
+      return false; 
     }
   }
 
-  async register(credentials: RegisterCredentials) {
-    this.isLoading = true;
+  async register(data: RegisterData) {
+    this.isLoading = true; 
+    this.error = null;
+
     try {
-      // Simulamos una llamada a API
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const { user, token } = await registerApi(data); 
+
+      localStorage.setItem('auth_token', token);
       
-      if (credentials.email && credentials.password && credentials.username) {
-        const user = {
-          id: Math.random().toString(36).substring(2, 9),
-          username: credentials.username,
-          email: credentials.email
-        };
-        
-        this.user = user;
-        this.isAuthenticated = true;
-        
-        localStorage.setItem("user", JSON.stringify(user));
-        
-        toast.success("Registro exitoso");
-        return true;
-      } else {
-        toast.error("Por favor complete todos los campos");
-        return false;
-      }
+      runInAction(() => {
+        this.user = user; 
+        this.token = token;
+        this.isLoading = false;
+      });
+      
+      return true; 
     } catch (error) {
-      toast.error("Error al registrarse");
-      return false;
-    } finally {
-      this.isLoading = false;
+      runInAction(() => {
+        this.error = {
+          type: 'user-exists',
+          message: error.message 
+        };
+        this.isLoading = false; 
+      });
+      
+      return false; 
     }
   }
 
-  logout() {
-    this.user = null;
-    this.isAuthenticated = false;
-    localStorage.removeItem("user");
-    toast.info("Sesión cerrada");
+  async logout() {
+    this.isLoading = true; 
+
+    localStorage.removeItem('auth_token'); 
+    
+    runInAction(() => {
+      this.user = null;
+      this.token = null; 
+      this.isLoading = false; 
+    });
+  }
+
+  clearError() {
+    this.error = null; 
   }
 }
 
