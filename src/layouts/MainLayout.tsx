@@ -14,7 +14,7 @@ const MainLayout: React.FC<MainLayoutProps> = observer(({ children }) => {
         {children}
       </div>
       <footer className="mt-20 py-6 text-center text-gray-400 text-sm">
-        <p>© 2025 TaskMaster. Todos los derechos reservados.</p>
+        <p>© 2025 TaskMaster. Todos los derechos reservados a Oscar Molina.</p>
       </footer>
     </div>
   );

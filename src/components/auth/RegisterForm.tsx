@@ -12,7 +12,7 @@ import { useStore } from "@/stores/StoreContext";
 import { Loader2, UserPlus } from "lucide-react";
 import { observer } from "mobx-react-lite";
 import React, { useState } from "react";
-import { toast } from "sonner"; // Asegúrate de tener instalado sonner
+import { toast } from "sonner"; 
 
 const RegisterForm: React.FC = observer(() => {
   const { authStore } = useStore();
@@ -48,7 +48,7 @@ const RegisterForm: React.FC = observer(() => {
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
-                authStore.clearError(); // Limpia error al escribir
+                authStore.clearError();
               }}
               className="bg-gray-900/10 border-gray-700/30 focus-visible:ring-blue-500"
               required

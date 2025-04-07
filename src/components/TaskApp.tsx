@@ -10,7 +10,6 @@ const TaskApp: React.FC = observer(() => {
   const { authStore } = useStore();
   const [route, setRoute] = useState<"tasks" | "login" | "register">("tasks");
 
-  // useEffect para manejar los cambios de hash
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.slice(1);
@@ -25,14 +24,13 @@ const TaskApp: React.FC = observer(() => {
     };
 
     window.addEventListener("hashchange", handleHashChange);
-    handleHashChange();  // Comprobar el hash inicial
+    handleHashChange(); 
     
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
   }, []);
 
-  // useEffect para manejar los redireccionamientos
   useEffect(() => {
     if (!authStore.isAuthenticated && route === "tasks") {
       window.location.hash = "#login";

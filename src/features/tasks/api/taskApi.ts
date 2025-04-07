@@ -3,7 +3,7 @@ import { CreateTaskDTO, Task, TaskResponseDTO, UpdateTaskDTO } from "../domain/t
 
 const API_BASE_URL = 'https://mobx-backend-production.up.railway.app/api/tasks';
 
-// Función para convertir la respuesta del servidor en un modelo de dominio dto
+
 const mapTaskResponseToTask = (taskDto: TaskResponseDTO): Task => ({
   ...taskDto,
   createdAt: new Date(taskDto.createdAt),

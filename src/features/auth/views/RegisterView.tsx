@@ -1,7 +1,6 @@
-
-import React from "react";
+import RegisterForm from "@/components/auth/RegisterForm";
 import { observer } from "mobx-react-lite";
-import RegisterForm from "@/components/auth/RegisterForm"; // Mantiene la ruta original por ser de solo lectura
+import React from "react";
 
 const RegisterView: React.FC = observer(() => {
   return (

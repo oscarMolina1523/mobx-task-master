@@ -1,6 +1,3 @@
-
-// Define las interfaces y tipos relacionados con el dominio de tareas
-
 export interface Task {
   _id: string;
   title: string;
@@ -30,5 +27,5 @@ export interface TaskResponseDTO {
   title: string;
   description?: string;
   completed: boolean;
-  createdAt: string; // ISO date string
+  createdAt: string; 
 }
