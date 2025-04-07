@@ -1,73 +1,59 @@
-# Welcome to your Lovable project
+<h1 align="left">Task Manager with Authentication</h1>
 
-## Project info
+###
 
-**URL**: https://lovable.dev/projects/358f156e-e9a2-44e8-b2db-de0081b1921c
+<p align="left">Este es un proyecto fullstack de una aplicación de gestión de tareas con autenticación, manejo de estados con MobX y protección de rutas usando tokens JWT. La aplicación permite a los usuarios registrarse, iniciar sesión y gestionar sus tareas.</p>
 
-## How can I edit this code?
+###
 
-There are several ways of editing your application.
+<h2 align="left">Tecnologías</h2>
 
-**Use Lovable**
+###
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/358f156e-e9a2-44e8-b2db-de0081b1921c) and start prompting.
+<p align="left">- React: Librería para la construcción de la interfaz de usuario.<br>- MobX: Librería para el manejo de estado global.<br>- Tailwind CSS: Framework CSS para el diseño de la interfaz.<br>- Axios: Cliente HTTP para interactuar con el backend.<br>- Vercel: Para el despliegue del frontend.</p>
 
-Changes made via Lovable will be committed automatically to this repo.
+###
 
-**Use your preferred IDE**
+<h2 align="left">Instrucciones para Ejecutar el Proyecto</h2>
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+###
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+<p align="left">Clonar el repositorio:<br><br>git clone https://github.com/oscarMolina1523/mobx-task-master.git<br>   cd mobx-task-master</p>
 
-Follow these steps:
+###
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+<p align="left">Instalar dependencias:<br><br>npm install</p>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+###
 
-# Step 3: Install the necessary dependencies.
-npm i
+<p align="left">Ejecutar el proyecto:<br><br>npm start</p>
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+###
 
-**Edit a file directly in GitHub**
+<h2 align="left">Despliegue</h2>
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+###
 
-**Use GitHub Codespaces**
+<p align="left">El frontend está desplegado en Vercel y puedes acceder a la aplicación en el siguiente enlace:<br><br>https://mobx-task-master.vercel.app/<br><br><br>Consume la Api desplegada en Railway:  <br><br>https://mobx-backend-production.up.railway.app/</p>
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+###
 
-## What technologies are used for this project?
+<h2 align="left">Conclusion</h2>
 
-This project is built with:
+###
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+<p align="left">Este frontend de la aplicación de gestión de tareas utiliza React para la construcción de la interfaz de usuario, MobX para el manejo eficiente del estado global y Axios para interactuar con la API backend. La aplicación es simple, pero demuestra cómo gestionar el estado global de manera efectiva en una aplicación React.<br><br>¡Espero que disfrutes revisando y probando este proyecto!</p>
 
-## How can I deploy this project?
+###
 
-Simply open [Lovable](https://lovable.dev/projects/358f156e-e9a2-44e8-b2db-de0081b1921c) and click on Share -> Publish.
+<p align="left"></p>
 
-## Can I connect a custom domain to my Lovable project?
+###
 
-Yes it is!
+<h2 align="left">Autor</h2>
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+###
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+<p align="left">Oscar Danilo Molina</p>
+
+###
